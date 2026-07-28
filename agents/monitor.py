@@ -15,8 +15,12 @@ class MonitorAgent:
 
         state.leaderboard_total = self.kaggle_client.get_team_count(state.competition)
 
+        def has_score(s):
+            v = s["publicScore"]
+            return v is not None and str(v).strip() != ""
+
         best_sub = max(
-            (s for s in my_subs if s["publicScore"] is not None),
+            (s for s in my_subs if has_score(s)),
             key=lambda s: s["date"],
             default=None,
         )
@@ -38,6 +42,12 @@ class MonitorAgent:
                     f"{len(board)} — posição exata desconhecida, mas certamente "
                     f"não está no topo do ranking ainda"
                 )
+        else:
+            state.note(
+                "[monitor] nenhuma submissão com score público ainda "
+                "(a Kaggle pode levar alguns minutos para pontuar arquivos "
+                "grandes) — tentaremos de novo na próxima execução"
+            )
         return state
 
     def goal_reached(self, state: PipelineState) -> bool:

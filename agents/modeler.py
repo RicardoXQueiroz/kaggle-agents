@@ -11,7 +11,7 @@ import joblib
 import lightgbm as lgb
 import pandas as pd
 from sklearn.model_selection import KFold
-from sklearn.metrics import mean_squared_error, accuracy_score
+from sklearn.metrics import mean_squared_error, balanced_accuracy_score
 
 from core.state import PipelineState
 
@@ -133,10 +133,10 @@ class ModelerAgent:
             y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
 
             if self.task == "classification":
-                model = lgb.LGBMClassifier(**params)
+                model = lgb.LGBMClassifier(class_weight="balanced", **params)
                 model.fit(X_train, y_train)
                 preds = model.predict(X_val)
-                score = accuracy_score(y_val, preds)
+                score = balanced_accuracy_score(y_val, preds)
             else:
                 model = lgb.LGBMRegressor(**params)
                 model.fit(X_train, y_train)

@@ -10,7 +10,7 @@ from agents.data_collector import DataCollectorAgent
 from agents.modeler import ModelerAgent
 from agents.monitor import MonitorAgent
 from agents.submitter import SubmitterAgent
-from core.kaggle_client import KaggleClient
+from core.kaggle_client import KaggleClient, KaggleSubmissionLimitReached
 from core.state import PipelineState, load_state, save_state
 
 
@@ -92,7 +92,16 @@ class Orchestrator:
                     )
                     break
                 state = self.modeler.predict(state)
-                state = self.submitter.run(state)
+                try:
+                    state = self.submitter.run(state)
+                except KaggleSubmissionLimitReached as e:
+                    state.note(
+                        f"[orchestrator] {e} — isso é esperado, não um bug. "
+                        "Parando aqui; a próxima execução agendada continua "
+                        "de onde este estado ficou salvo."
+                    )
+                    self._checkpoint(state)
+                    break
                 state.submissions_this_run += 1
                 self._checkpoint(state)
                 continue

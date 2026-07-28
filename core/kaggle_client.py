@@ -9,6 +9,12 @@ espalhar chamadas 'kaggle.api.xxx' pelo resto do código.
 from pathlib import Path
 
 
+class KaggleSubmissionLimitReached(RuntimeError):
+    """Levantada quando a Kaggle recusa a submissão por limite diário
+    atingido — um estado esperado, não uma falha do sistema. O
+    orquestrador trata isso como uma parada normal, não como erro fatal."""
+
+
 class KaggleClient:
     def __init__(self):
         # O pacote kaggle mais recente autentica automaticamente no
@@ -39,9 +45,16 @@ class KaggleClient:
         except requests.exceptions.HTTPError as e:
             # O SDK novo não expõe a mensagem de erro da Kaggle no
             # traceback padrão — ela vem no corpo da resposta HTTP.
-            # Causas comuns de 400 aqui: limite diário de submissões
-            # atingido, ou regras da competição não aceitas no site.
             body = e.response.text if e.response is not None else "(sem corpo de resposta)"
+
+            if "daily submission allowance" in body.lower():
+                raise KaggleSubmissionLimitReached(
+                    f"Limite diário de submissões atingido para '{competition}'. "
+                    f"Resposta da Kaggle: {body}"
+                ) from e
+
+            # Outras causas de 400 (ex: regras da competição não aceitas
+            # no site) continuam como erro fatal — merecem investigação.
             raise RuntimeError(
                 f"Falha ao submeter para '{competition}': {e}\n"
                 f"Resposta da Kaggle: {body}"

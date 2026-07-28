@@ -36,8 +36,8 @@ jobs:
 
       - name: Rodar o orquestrador
         env:
-          KAGGLE_COMPETITION: playground-series-s6e6
-          TARGET_COLUMN: class
+          KAGGLE_COMPETITION: playground-series-s6e7
+          TARGET_COLUMN: health_condition
           TASK: classification
           ID_COLUMN: id
           TARGET_PERCENTILE: "0.20"

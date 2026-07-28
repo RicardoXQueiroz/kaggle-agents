@@ -7,6 +7,8 @@ e dá rastreabilidade total do que aconteceu em cada rodada.
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Optional
+import dataclasses
+import json
 
 
 @dataclass
@@ -55,6 +57,7 @@ class PipelineState:
     iteration: int = 0
     max_iterations: int = 10
     max_submissions_per_run: int = 5
+    submissions_this_run: int = 0
     log: list[str] = field(default_factory=list)
 
     def note(self, msg: str) -> None:
@@ -62,3 +65,23 @@ class PipelineState:
         entry = f"[{stamp}] {msg}"
         self.log.append(entry)
         print(entry)
+
+
+def save_state(state: PipelineState, path: str) -> None:
+    """Serializa o estado pra JSON, pra sobreviver entre execuções
+    (ex: entre uma rodada e outra do GitHub Actions, que roda em uma
+    VM nova a cada vez — nada em disco sobrevive exceto o que está
+    no repositório)."""
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(dataclasses.asdict(state), f, indent=2, ensure_ascii=False)
+
+
+def load_state(path: str) -> PipelineState:
+    """Reconstrói o PipelineState a partir do JSON salvo por save_state."""
+    with open(path, encoding="utf-8") as f:
+        data = json.load(f)
+
+    submissions_raw = data.pop("submission_history", [])
+    state = PipelineState(**data)
+    state.submission_history = [Submission(**s) for s in submissions_raw]
+    return state

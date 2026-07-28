@@ -42,6 +42,44 @@ agents/
 orchestrator.py         # loop de decisão central
 ```
 
+## Automação via GitHub Actions
+
+O workflow em `.github/workflows/run.yml` roda o orquestrador sozinho, a
+cada 6 horas, sem você precisar estar com o notebook aberto.
+
+**Setup (uma vez só):**
+
+1. Suba este projeto pra um repositório no GitHub (pode ser privado).
+2. Vá em **Settings > Secrets and variables > Actions > New repository
+   secret**, crie um secret chamado `KAGGLE_API_TOKEN` com o valor do seu
+   token (o mesmo `KGAT_...` que você usa em `~/.kaggle/access_token`
+   localmente).
+3. Confirme que aceitou as regras da competição manualmente no site da
+   Kaggle — isso a automação não pode fazer por você.
+4. Pronto. O workflow já está agendado (`cron: "0 */6 * * *"`). Pra testar
+   sem esperar, vá na aba **Actions** do repositório, escolha "Run Kaggle
+   agent team" e clique em **Run workflow**.
+
+**Como a persistência funciona:**
+
+Cada execução do GitHub Actions roda numa VM nova, que não guarda nada de
+uma vez pra outra. Por isso o orquestrador salva o progresso em
+`state.json` a cada passo, e o workflow faz commit desse arquivo de volta
+no repositório ao final. Na próxima execução, o orquestrador carrega esse
+`state.json` e continua de onde parou — sem re-treinar do zero, sem perder
+o histórico de submissões.
+
+Dados baixados (`data/`) e modelos treinados (`models/`) **não** são
+versionados (veja `.gitignore`) — são recriados a cada execução, o que é
+rápido e evita o problema de redistribuir dados de competição num
+repositório.
+
+**Cuidado com o limite de submissões:** o `max_submissions_per_run=5`
+protege uma única execução, mas se o workflow rodar várias vezes ao dia
+(a cada 6h = 4x/dia) e cada uma submeter algumas vezes, ainda dá pra
+esbarrar no limite diário da Kaggle. Ajuste o `cron` pra rodar com menos
+frequência (ex: uma vez por dia) se isso acontecer.
+
 ## Limitações conhecidas (próximos passos)
 
 - **Modeler**: usa só features numéricas no baseline — falta encoding

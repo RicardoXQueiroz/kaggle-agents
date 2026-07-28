@@ -1,0 +1,13 @@
+# Ambiente Python
+venv/
+__pycache__/
+*.pyc
+
+# Dados baixados da Kaggle — NUNCA versionar. A maioria das
+# competições proíbe redistribuição dos dados nas regras oficiais;
+# um repositório público com esses arquivos pode violar os termos.
+data/
+
+# Modelos treinados — grandes e reproduzíveis a partir do código,
+# não precisam ficar no controle de versão.
+models/

@@ -1,0 +1,54 @@
+name: Run Kaggle agent team
+
+on:
+  # Roda automaticamente a cada 6 horas.
+  schedule:
+    - cron: "0 */6 * * *"
+  # Permite rodar manualmente pela aba "Actions" do GitHub, sem esperar o horário.
+  workflow_dispatch: {}
+
+# Necessário para o job conseguir dar commit/push do state.json atualizado.
+permissions:
+  contents: write
+
+jobs:
+  run-agents:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      - name: Configurar credenciais da Kaggle
+        run: |
+          mkdir -p ~/.kaggle
+          echo "${{ secrets.KAGGLE_API_TOKEN }}" > ~/.kaggle/access_token
+          chmod 600 ~/.kaggle/access_token
+
+      - name: Rodar o orquestrador
+        env:
+          KAGGLE_COMPETITION: titanic
+          TARGET_COLUMN: Survived
+          TASK: classification
+          ID_COLUMN: PassengerId
+          TARGET_PERCENTILE: "0.20"
+          MAX_ITERATIONS: "25"
+          STATE_PATH: state.json
+        run: python orchestrator.py
+
+      - name: Salvar o estado atualizado no repositório
+        run: |
+          git config user.name "kaggle-agent-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet && echo "Nada novo para commitar" || git commit -m "chore: atualiza state.json [skip ci]"
+          git push

@@ -78,9 +78,9 @@
     "Title"
   ],
   "target_column": "Survived",
-  "current_model_id": "2aee051c",
-  "current_model_path": "models/model_2aee051c.joblib",
-  "cv_score": 0.8282342602473165,
+  "current_model_id": "7890e80c",
+  "current_model_path": "models/model_7890e80c.joblib",
+  "cv_score": 0.8339087314041805,
   "cv_history": [
     {
       "model_id": "53a71626",
@@ -101,13 +101,23 @@
         "max_depth": -1,
         "num_leaves": 31
       }
+    },
+    {
+      "model_id": "7890e80c",
+      "cv_score": 0.8339087314041805,
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.05,
+        "max_depth": 4,
+        "num_leaves": 15
+      }
     }
   ],
   "best_cv_score": 0.8349883874207519,
   "no_improve_count": 1,
   "retrain_patience": 3,
   "submission_history": [],
-  "predictions_path": "models/predictions_2aee051c.csv",
+  "predictions_path": "models/predictions_7890e80c.csv",
   "leaderboard_position": null,
   "leaderboard_total": null,
   "best_public_score": null,
@@ -146,6 +156,18 @@
     "[08:26:12] --- iteração 2 ---",
     "[08:26:12] [modeler] gerando predictions no test set",
     "[08:26:12] [submitter] formatando submissão do modelo 2aee051c",
-    "[08:26:13] [orchestrator] Limite diário de submissões atingido para 'titanic'. Resposta da Kaggle: {\"error\":{\"code\":400,\"message\":\"Submission not allowed:  Your team has used its daily Submission allowance (10) today, please try again tomorrow UTC (15 hours from now).\",\"status\":\"FAILED_PRECONDITION\"}} — isso é esperado, não um bug. Parando aqui; a próxima execução agendada continua de onde este estado ficou salvo."
+    "[08:26:13] [orchestrator] Limite diário de submissões atingido para 'titanic'. Resposta da Kaggle: {\"error\":{\"code\":400,\"message\":\"Submission not allowed:  Your team has used its daily Submission allowance (10) today, please try again tomorrow UTC (15 hours from now).\",\"status\":\"FAILED_PRECONDITION\"}} — isso é esperado, não um bug. Parando aqui; a próxima execução agendada continua de onde este estado ficou salvo.",
+    "[12:30:38] --- iteração 1 ---",
+    "[12:30:38] [modeler] treinando modelo com cross-validation, params={'n_estimators': 300, 'learning_rate': 0.05, 'max_depth': 4, 'num_leaves': 15}",
+    "[12:30:38] [modeler] fold 0: score=0.8212",
+    "[12:30:38] [modeler] fold 1: score=0.8090",
+    "[12:30:38] [modeler] fold 2: score=0.8652",
+    "[12:30:38] [modeler] fold 3: score=0.8202",
+    "[12:30:38] [modeler] fold 4: score=0.8539",
+    "[12:30:38] [modeler] modelo 7890e80c treinado, cv_score médio=0.8339 (melhor até agora=0.8350, sem melhora há 1 tentativa(s))",
+    "[12:30:38] --- iteração 2 ---",
+    "[12:30:38] [modeler] gerando predictions no test set",
+    "[12:30:38] [submitter] formatando submissão do modelo 7890e80c",
+    "[12:30:39] [orchestrator] Limite diário de submissões atingido para 'titanic'. Resposta da Kaggle: {\"error\":{\"code\":400,\"message\":\"Submission not allowed:  Your team has used its daily Submission allowance (10) today, please try again tomorrow UTC (11 hours from now).\",\"status\":\"FAILED_PRECONDITION\"}} — isso é esperado, não um bug. Parando aqui; a próxima execução agendada continua de onde este estado ficou salvo."
   ]
 }

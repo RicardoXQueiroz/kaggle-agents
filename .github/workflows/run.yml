@@ -61,6 +61,31 @@ jobs:
         run: |
           git config user.name "kaggle-agent-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add state.json
-          git diff --cached --quiet && echo "Nada novo para commitar" || git commit -m "chore: atualiza state.json [skip ci]"
-          git push
+
+          # Guarda o state.json gerado nesta execução antes de mexer
+          # em qualquer coisa. Se um push manual ou outra execução
+          # mudou o repositório enquanto este job rodava, um "git
+          # push" simples falharia com "fetch first" — em vez de
+          # tentar resolver conflito no arquivo, simplesmente
+          # sincronizamos com o remoto mais recente e reaplicamos
+          # por cima o resultado desta execução (last-write-wins).
+          cp state.json /tmp/state_this_run.json
+
+          for i in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+            cp /tmp/state_this_run.json state.json
+            git add state.json
+            if git diff --cached --quiet; then
+              echo "Nada novo para commitar"
+              exit 0
+            fi
+            git commit -m "chore: atualiza state.json [skip ci]"
+            if git push origin main; then
+              echo "Push bem-sucedido na tentativa $i"
+              exit 0
+            fi
+            echo "Push falhou (tentativa $i), sincronizando e tentando de novo..."
+          done
+          echo "Falhou após 5 tentativas"
+          exit 1

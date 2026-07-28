@@ -14,7 +14,10 @@ permissions:
 jobs:
   run-agents:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # Dataset grande (462k linhas): cada modelo demora ~5-6min pra
+    # treinar. Com vários hiperparâmetros em sequência, 30min não
+    # bastava e o job era cancelado à força no meio de uma submissão.
+    timeout-minutes: 180
 
     steps:
       - name: Checkout do repositório
@@ -35,6 +38,11 @@ jobs:
           chmod 600 ~/.kaggle/access_token
 
       - name: Rodar o orquestrador
+        # Limita cada rodada de treino a ~10min: 25 iterações * até
+        # 5-6min cada seria demais. MAX_ITERATIONS menor aqui garante
+        # que o step termine dentro do tempo do job, mesmo que não
+        # bata a meta — a próxima execução agendada continua do ponto
+        # salvo no state.json.
         env:
           KAGGLE_COMPETITION: playground-series-s6e7
           TARGET_COLUMN: health_condition
@@ -46,6 +54,10 @@ jobs:
         run: python orchestrator.py
 
       - name: Salvar o estado atualizado no repositório
+        # if: always() garante que este step roda mesmo se o anterior
+        # falhar, der timeout ou for cancelado — sem isso, todo o
+        # progresso feito antes do problema seria perdido.
+        if: always()
         run: |
           git config user.name "kaggle-agent-bot"
           git config user.email "actions@users.noreply.github.com"

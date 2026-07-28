@@ -19,9 +19,18 @@ class Orchestrator:
                  id_column: str = "id", target_percentile: float = 0.20,
                  max_iterations: int = 10, state_path: str | None = None):
         self.state_path = state_path
+        loaded = None
 
         if state_path and os.path.exists(state_path):
-            self.state = load_state(state_path)
+            loaded = load_state(state_path)
+            if loaded.competition != competition:
+                # Estado salvo é de outra competição — começar do zero
+                # em vez de misturar features/modelo de um dataset
+                # diferente com a competição atual.
+                loaded = None
+
+        if loaded is not None:
+            self.state = loaded
             self._reconcile_after_load(self.state, max_iterations)
         else:
             self.state = PipelineState(

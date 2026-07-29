@@ -102,9 +102,9 @@
     "gender"
   ],
   "target_column": "health_condition",
-  "current_model_id": "e7f5febd",
-  "current_model_path": "models/model_e7f5febd.joblib",
-  "cv_score": 0.9495338414348975,
+  "current_model_id": "1965b8a9",
+  "current_model_path": "models/model_1965b8a9.joblib",
+  "cv_score": 0.9493434086819393,
   "cv_history": [
     {
       "model_id": "e7f5febd",
@@ -115,21 +115,73 @@
         "max_depth": -1,
         "num_leaves": 31
       }
+    },
+    {
+      "model_id": "603b4280",
+      "cv_score": 0.9494303661639407,
+      "params": {
+        "n_estimators": 600,
+        "learning_rate": 0.03,
+        "max_depth": -1,
+        "num_leaves": 31
+      }
+    },
+    {
+      "model_id": "57dd00fe",
+      "cv_score": 0.9491116869159966,
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.05,
+        "max_depth": 4,
+        "num_leaves": 15
+      }
+    },
+    {
+      "model_id": "1965b8a9",
+      "cv_score": 0.9493434086819393,
+      "params": {
+        "n_estimators": 800,
+        "learning_rate": 0.02,
+        "max_depth": 6,
+        "num_leaves": 63
+      }
     }
   ],
   "best_cv_score": 0.9495338414348975,
-  "no_improve_count": 0,
+  "no_improve_count": 3,
   "retrain_patience": 3,
-  "submission_history": [],
-  "predictions_path": "models/predictions_e7f5febd.csv",
+  "submission_history": [
+    {
+      "timestamp": "2026-07-29T02:11:04.858381",
+      "model_id": "603b4280",
+      "local_cv_score": 0.9494303661639407,
+      "public_score": null,
+      "message": "model=603b4280 cv=0.9494"
+    },
+    {
+      "timestamp": "2026-07-29T02:12:50.700728",
+      "model_id": "57dd00fe",
+      "local_cv_score": 0.9491116869159966,
+      "public_score": null,
+      "message": "model=57dd00fe cv=0.9491"
+    },
+    {
+      "timestamp": "2026-07-29T02:18:43.313374",
+      "model_id": "1965b8a9",
+      "local_cv_score": 0.9493434086819393,
+      "public_score": null,
+      "message": "model=1965b8a9 cv=0.9493"
+    }
+  ],
+  "predictions_path": "models/predictions_1965b8a9.csv",
   "leaderboard_position": null,
-  "leaderboard_total": null,
-  "best_public_score": null,
+  "leaderboard_total": 3056,
+  "best_public_score": 0.94865,
   "target_percentile": 0.2,
-  "iteration": 4,
+  "iteration": 11,
   "max_iterations": 25,
   "max_submissions_per_run": 5,
-  "submissions_this_run": 0,
+  "submissions_this_run": 3,
   "log": [
     "[19:31:41] --- iteração 1 ---",
     "[19:31:41] [data_collector] baixando dados de 'playground-series-s6e7'",
@@ -148,6 +200,60 @@
     "[19:34:32] --- iteração 4 ---",
     "[19:34:32] [modeler] gerando predictions no test set",
     "[19:34:44] [submitter] formatando submissão do modelo e7f5febd",
-    "[19:34:45] [orchestrator] Limite diário de submissões atingido para 'playground-series-s6e7'. Resposta da Kaggle: {\"error\":{\"code\":400,\"message\":\"Submission not allowed:  Your team has used its daily Submission allowance (10) today, please try again tomorrow UTC (4.4 hours from now).\",\"status\":\"FAILED_PRECONDITION\"}} — isso é esperado, não um bug. Parando aqui; a próxima execução agendada continua de onde este estado ficou salvo."
+    "[19:34:45] [orchestrator] Limite diário de submissões atingido para 'playground-series-s6e7'. Resposta da Kaggle: {\"error\":{\"code\":400,\"message\":\"Submission not allowed:  Your team has used its daily Submission allowance (10) today, please try again tomorrow UTC (4.4 hours from now).\",\"status\":\"FAILED_PRECONDITION\"}} — isso é esperado, não um bug. Parando aqui; a próxima execução agendada continua de onde este estado ficou salvo.",
+    "[02:07:29] --- iteração 1 ---",
+    "[02:07:29] [data_collector] baixando dados de 'playground-series-s6e7'",
+    "[02:07:30] [data_collector] EDA: {'n_rows': 690088, 'n_cols': 15, 'columns': ['id', 'health_condition', 'sleep_duration', 'heart_rate', 'bmi', 'calorie_expenditure', 'step_count', 'exercise_duration', 'water_intake', 'diet_type', 'stress_level', 'sleep_quality', 'physical_activity_level', 'smoking_alcohol', 'gender'], 'dtypes': {'id': 'int64', 'health_condition': 'str', 'sleep_duration': 'float64', 'heart_rate': 'float64', 'bmi': 'float64', 'calorie_expenditure': 'float64', 'step_count': 'float64', 'exercise_duration': 'float64', 'water_intake': 'float64', 'diet_type': 'str', 'stress_level': 'str', 'sleep_quality': 'str', 'physical_activity_level': 'str', 'smoking_alcohol': 'str', 'gender': 'str'}, 'null_pct': {'id': 0.0, 'health_condition': 0.0, 'sleep_duration': 11.01, 'heart_rate': 1.14, 'bmi': 2.01, 'calorie_expenditure': 7.66, 'step_count': 2.02, 'exercise_duration': 1.0, 'water_intake': 6.3, 'diet_type': 1.0, 'stress_level': 12.0, 'sleep_quality': 8.45, 'physical_activity_level': 5.31, 'smoking_alcohol': 4.14, 'gender': 3.1}}",
+    "[02:07:30] --- iteração 2 ---",
+    "[02:07:30] [modeler] preparando features",
+    "[02:07:31] [modeler] 8 features numéricas + 6 categóricas (24 colunas após encoding)",
+    "[02:07:31] --- iteração 3 ---",
+    "[02:07:31] [modeler] treinando modelo com cross-validation, params={'n_estimators': 600, 'learning_rate': 0.03, 'max_depth': -1, 'num_leaves': 31}",
+    "[02:08:10] [modeler] fold 0: score=0.9502",
+    "[02:08:49] [modeler] fold 1: score=0.9477",
+    "[02:09:29] [modeler] fold 2: score=0.9495",
+    "[02:10:08] [modeler] fold 3: score=0.9482",
+    "[02:10:46] [modeler] fold 4: score=0.9516",
+    "[02:10:46] [modeler] modelo 603b4280 treinado, cv_score médio=0.9494 (melhor até agora=0.9495, sem melhora há 1 tentativa(s))",
+    "[02:10:46] --- iteração 4 ---",
+    "[02:10:46] [modeler] gerando predictions no test set",
+    "[02:11:02] [submitter] formatando submissão do modelo 603b4280",
+    "[02:11:04] [submitter] enviado: model=603b4280 cv=0.9494",
+    "[02:11:04] --- iteração 5 ---",
+    "[02:11:04] [monitor] consultando leaderboard",
+    "[02:11:05] [monitor] score 0.86379 fora do top 20 — posição exata desconhecida, mas certamente não está no topo do ranking ainda",
+    "[02:11:05] [orchestrator] meta não atingida, retreinando com ajuste",
+    "[02:11:05] --- iteração 6 ---",
+    "[02:11:05] [modeler] treinando modelo com cross-validation, params={'n_estimators': 300, 'learning_rate': 0.05, 'max_depth': 4, 'num_leaves': 15}",
+    "[02:11:25] [modeler] fold 0: score=0.9499",
+    "[02:11:44] [modeler] fold 1: score=0.9473",
+    "[02:12:03] [modeler] fold 2: score=0.9492",
+    "[02:12:22] [modeler] fold 3: score=0.9481",
+    "[02:12:41] [modeler] fold 4: score=0.9512",
+    "[02:12:41] [modeler] modelo 57dd00fe treinado, cv_score médio=0.9491 (melhor até agora=0.9495, sem melhora há 2 tentativa(s))",
+    "[02:12:41] --- iteração 7 ---",
+    "[02:12:41] [modeler] gerando predictions no test set",
+    "[02:12:48] [submitter] formatando submissão do modelo 57dd00fe",
+    "[02:12:50] [submitter] enviado: model=57dd00fe cv=0.9491",
+    "[02:12:50] --- iteração 8 ---",
+    "[02:12:50] [monitor] consultando leaderboard",
+    "[02:12:51] [monitor] score 0.94911 fora do top 20 — posição exata desconhecida, mas certamente não está no topo do ranking ainda",
+    "[02:12:51] [orchestrator] meta não atingida, retreinando com ajuste",
+    "[02:12:51] --- iteração 9 ---",
+    "[02:12:51] [modeler] treinando modelo com cross-validation, params={'n_estimators': 800, 'learning_rate': 0.02, 'max_depth': 6, 'num_leaves': 63}",
+    "[02:13:56] [modeler] fold 0: score=0.9502",
+    "[02:14:59] [modeler] fold 1: score=0.9474",
+    "[02:16:03] [modeler] fold 2: score=0.9496",
+    "[02:17:07] [modeler] fold 3: score=0.9481",
+    "[02:18:10] [modeler] fold 4: score=0.9515",
+    "[02:18:10] [modeler] modelo 1965b8a9 treinado, cv_score médio=0.9493 (melhor até agora=0.9495, sem melhora há 3 tentativa(s))",
+    "[02:18:10] --- iteração 10 ---",
+    "[02:18:10] [modeler] gerando predictions no test set",
+    "[02:18:40] [submitter] formatando submissão do modelo 1965b8a9",
+    "[02:18:43] [submitter] enviado: model=1965b8a9 cv=0.9493",
+    "[02:18:43] --- iteração 11 ---",
+    "[02:18:43] [monitor] consultando leaderboard",
+    "[02:18:44] [monitor] score 0.94865 fora do top 20 — posição exata desconhecida, mas certamente não está no topo do ranking ainda",
+    "[02:18:44] [orchestrator] 3 tentativas sem melhora (paciência=3). Parando — modelo atual provavelmente já é o melhor que essa abordagem consegue."
   ]
 }

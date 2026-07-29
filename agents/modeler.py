@@ -9,6 +9,7 @@ from pathlib import Path
 
 import joblib
 import lightgbm as lgb
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error, balanced_accuracy_score
@@ -61,6 +62,33 @@ class ModelerAgent:
         if "SibSp" in df.columns and "Parch" in df.columns:
             df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
             df["IsAlone"] = (df["FamilySize"] == 1).astype(int)
+
+        health_cols = {
+            "sleep_duration", "heart_rate", "bmi", "calorie_expenditure",
+            "step_count", "exercise_duration", "water_intake",
+        }
+        if health_cols.issubset(df.columns):
+            # Faixas clínicas padrão de BMI — categórico, vira sinal
+            # forte via one-hot (o valor numérico bruto já entra
+            # como feature, isso captura o efeito de limiar).
+            df["bmi_category"] = pd.cut(
+                pd.to_numeric(df["bmi"], errors="coerce"),
+                bins=[-np.inf, 18.5, 25, 30, np.inf],
+                labels=["underweight", "normal", "overweight", "obese"],
+            ).astype(str)
+
+            # +1 no denominador evita divisão por zero sem descartar
+            # linhas; olhando as unidades, isso é irrelevante no
+            # resultado pra valores normais dessas colunas.
+            df["calories_per_step"] = df["calorie_expenditure"] / (df["step_count"] + 1)
+            df["steps_per_exercise_min"] = df["step_count"] / (df["exercise_duration"] + 1)
+            df["water_per_bmi"] = df["water_intake"] / (df["bmi"] + 1)
+            df["heart_rate_bmi_interaction"] = df["heart_rate"] * df["bmi"]
+            # Déficit de sono: quanto abaixo de 8h, zerado se dormiu o
+            # suficiente (não queremos "sono extra" cancelando déficit
+            # de outro dia na mesma linha).
+            df["sleep_deficit"] = (8 - df["sleep_duration"]).clip(lower=0)
+            df["activity_per_calorie"] = df["exercise_duration"] / (df["calorie_expenditure"] + 1)
 
         return df
 

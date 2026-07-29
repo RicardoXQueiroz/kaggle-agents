@@ -11,10 +11,46 @@ import joblib
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error, balanced_accuracy_score
 
 from core.state import PipelineState
+
+
+class _EnsembleClassifier:
+    """Combina LightGBM + Random Forest por média de probabilidades
+    (soft voting). Dois algoritmos com vieses diferentes tendem a
+    errar em casos diferentes — a média often reduz erro que nenhum
+    dos dois sozinho corrigiria. Implementa .fit/.predict como um
+    estimador comum, então o resto do pipeline (salvar com joblib,
+    chamar .predict) não precisa saber que é um ensemble por baixo.
+    """
+
+    def __init__(self, lgb_params: dict):
+        self.lgb_params = lgb_params
+
+    def fit(self, X, y):
+        self.lgb_model = lgb.LGBMClassifier(class_weight="balanced", **self.lgb_params)
+        self.lgb_model.fit(X, y)
+
+        self.rf_model = RandomForestClassifier(
+            n_estimators=300, class_weight="balanced", n_jobs=-1, random_state=42
+        )
+        self.rf_model.fit(X, y)
+
+        self.classes_ = self.lgb_model.classes_
+        return self
+
+    def predict_proba(self, X):
+        proba_lgb = self.lgb_model.predict_proba(X)
+        proba_rf = self.rf_model.predict_proba(X)
+        return (proba_lgb + proba_rf) / 2
+
+    def predict(self, X):
+        proba = self.predict_proba(X)
+        idx = np.argmax(proba, axis=1)
+        return self.classes_[idx]
 
 
 class ModelerAgent:
@@ -161,7 +197,7 @@ class ModelerAgent:
             y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
 
             if self.task == "classification":
-                model = lgb.LGBMClassifier(class_weight="balanced", **params)
+                model = _EnsembleClassifier(params)
                 model.fit(X_train, y_train)
                 preds = model.predict(X_val)
                 score = balanced_accuracy_score(y_val, preds)

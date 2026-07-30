@@ -114,9 +114,9 @@
     "bmi_category"
   ],
   "target_column": "health_condition",
-  "current_model_id": "be70694d",
-  "current_model_path": "models/model_be70694d.joblib",
-  "cv_score": 0.9474541905863317,
+  "current_model_id": "73dfc42d",
+  "current_model_path": "models/model_73dfc42d.joblib",
+  "cv_score": 0.9471812780684121,
   "cv_history": [
     {
       "model_id": "c020e7ad",
@@ -187,10 +187,20 @@
         "max_depth": -1,
         "num_leaves": 31
       }
+    },
+    {
+      "model_id": "73dfc42d",
+      "cv_score": 0.9471812780684121,
+      "params": {
+        "n_estimators": 300,
+        "learning_rate": 0.05,
+        "max_depth": 4,
+        "num_leaves": 15
+      }
     }
   ],
   "best_cv_score": 0.9495961326497472,
-  "no_improve_count": 3,
+  "no_improve_count": 1,
   "retrain_patience": 3,
   "submission_history": [
     {
@@ -220,17 +230,24 @@
       "local_cv_score": 0.9474541905863317,
       "public_score": null,
       "message": "model=be70694d cv=0.9475"
+    },
+    {
+      "timestamp": "2026-07-30T08:35:44.200993",
+      "model_id": "73dfc42d",
+      "local_cv_score": 0.9471812780684121,
+      "public_score": null,
+      "message": "model=73dfc42d cv=0.9472"
     }
   ],
-  "predictions_path": "models/predictions_be70694d.csv",
+  "predictions_path": "models/predictions_73dfc42d.csv",
   "leaderboard_position": null,
   "leaderboard_total": 3156,
   "best_public_score": 0.94822,
   "target_percentile": 0.2,
-  "iteration": 11,
+  "iteration": 4,
   "max_iterations": 25,
   "max_submissions_per_run": 5,
-  "submissions_this_run": 3,
+  "submissions_this_run": 1,
   "log": [
     "[16:53:42] --- iteração 1 ---",
     "[16:53:42] [data_collector] baixando dados de 'playground-series-s6e7'",
@@ -355,6 +372,24 @@
     "[03:17:33] --- iteração 11 ---",
     "[03:17:33] [monitor] consultando leaderboard",
     "[03:17:34] [monitor] score 0.94822 fora do top 20 — posição exata desconhecida, mas certamente não está no topo do ranking ainda",
-    "[03:17:34] [orchestrator] 3 tentativas sem melhora (paciência=3). Parando — modelo atual provavelmente já é o melhor que essa abordagem consegue."
+    "[03:17:34] [orchestrator] 3 tentativas sem melhora (paciência=3). Parando — modelo atual provavelmente já é o melhor que essa abordagem consegue.",
+    "[08:17:30] --- iteração 1 ---",
+    "[08:17:30] [data_collector] baixando dados de 'playground-series-s6e7'",
+    "[08:17:31] [data_collector] EDA: {'n_rows': 690088, 'n_cols': 15, 'columns': ['id', 'health_condition', 'sleep_duration', 'heart_rate', 'bmi', 'calorie_expenditure', 'step_count', 'exercise_duration', 'water_intake', 'diet_type', 'stress_level', 'sleep_quality', 'physical_activity_level', 'smoking_alcohol', 'gender'], 'dtypes': {'id': 'int64', 'health_condition': 'str', 'sleep_duration': 'float64', 'heart_rate': 'float64', 'bmi': 'float64', 'calorie_expenditure': 'float64', 'step_count': 'float64', 'exercise_duration': 'float64', 'water_intake': 'float64', 'diet_type': 'str', 'stress_level': 'str', 'sleep_quality': 'str', 'physical_activity_level': 'str', 'smoking_alcohol': 'str', 'gender': 'str'}, 'null_pct': {'id': 0.0, 'health_condition': 0.0, 'sleep_duration': 11.01, 'heart_rate': 1.14, 'bmi': 2.01, 'calorie_expenditure': 7.66, 'step_count': 2.02, 'exercise_duration': 1.0, 'water_intake': 6.3, 'diet_type': 1.0, 'stress_level': 12.0, 'sleep_quality': 8.45, 'physical_activity_level': 5.31, 'smoking_alcohol': 4.14, 'gender': 3.1}}",
+    "[08:17:31] --- iteração 2 ---",
+    "[08:17:31] [modeler] preparando features",
+    "[08:17:32] [modeler] 14 features numéricas + 7 categóricas (29 colunas após encoding)",
+    "[08:17:32] --- iteração 3 ---",
+    "[08:17:32] [modeler] treinando modelo com cross-validation, params={'n_estimators': 300, 'learning_rate': 0.05, 'max_depth': 4, 'num_leaves': 15}",
+    "[08:21:13] [modeler] fold 0: score=0.9482",
+    "[08:24:47] [modeler] fold 1: score=0.9446",
+    "[08:28:18] [modeler] fold 2: score=0.9474",
+    "[08:31:50] [modeler] fold 3: score=0.9459",
+    "[08:35:23] [modeler] fold 4: score=0.9498",
+    "[08:35:24] [modeler] modelo 73dfc42d treinado, cv_score médio=0.9472 (melhor até agora=0.9496, sem melhora há 1 tentativa(s))",
+    "[08:35:24] --- iteração 4 ---",
+    "[08:35:24] [modeler] gerando predictions no test set",
+    "[08:35:41] [submitter] formatando submissão do modelo 73dfc42d",
+    "[08:35:44] [submitter] enviado: model=73dfc42d cv=0.9472"
   ]
 }

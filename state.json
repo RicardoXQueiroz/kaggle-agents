@@ -114,9 +114,9 @@
     "bmi_category"
   ],
   "target_column": "health_condition",
-  "current_model_id": "242f221c",
-  "current_model_path": "models/model_242f221c.joblib",
-  "cv_score": 0.9471812780684121,
+  "current_model_id": "3ae04d73",
+  "current_model_path": "models/model_3ae04d73.joblib",
+  "cv_score": 0.9474356985897892,
   "cv_history": [
     {
       "model_id": "c020e7ad",
@@ -347,10 +347,30 @@
         "max_depth": 4,
         "num_leaves": 15
       }
+    },
+    {
+      "model_id": "50abea8c",
+      "cv_score": 0.9472224963480237,
+      "params": {
+        "n_estimators": 800,
+        "learning_rate": 0.02,
+        "max_depth": 6,
+        "num_leaves": 63
+      }
+    },
+    {
+      "model_id": "3ae04d73",
+      "cv_score": 0.9474356985897892,
+      "params": {
+        "n_estimators": 400,
+        "learning_rate": 0.05,
+        "max_depth": 3,
+        "num_leaves": 7
+      }
     }
   ],
   "best_cv_score": 0.9495961326497472,
-  "no_improve_count": 3,
+  "no_improve_count": 2,
   "retrain_patience": 3,
   "submission_history": [
     {
@@ -492,17 +512,24 @@
       "local_cv_score": 0.9471812780684121,
       "public_score": null,
       "message": "model=242f221c cv=0.9472"
+    },
+    {
+      "timestamp": "2026-07-31T19:34:03.893739",
+      "model_id": "50abea8c",
+      "local_cv_score": 0.9472224963480237,
+      "public_score": null,
+      "message": "model=50abea8c cv=0.9472"
     }
   ],
-  "predictions_path": "models/predictions_242f221c.csv",
+  "predictions_path": "models/predictions_3ae04d73.csv",
   "leaderboard_position": null,
-  "leaderboard_total": 3322,
-  "best_public_score": 0.94787,
+  "leaderboard_total": 3350,
+  "best_public_score": 0.94724,
   "target_percentile": 0.2,
-  "iteration": 11,
+  "iteration": 7,
   "max_iterations": 25,
   "max_submissions_per_run": 5,
-  "submissions_this_run": 3,
+  "submissions_this_run": 1,
   "log": [
     "[16:53:42] --- iteração 1 ---",
     "[16:53:42] [data_collector] baixando dados de 'playground-series-s6e7'",
@@ -915,6 +942,40 @@
     "[15:08:49] --- iteração 11 ---",
     "[15:08:49] [monitor] consultando leaderboard",
     "[15:08:49] [monitor] score 0.94787 fora do top 20 — posição exata desconhecida, mas certamente não está no topo do ranking ainda",
-    "[15:08:49] [orchestrator] 3 tentativas sem melhora (paciência=3). Parando — modelo atual provavelmente já é o melhor que essa abordagem consegue."
+    "[15:08:49] [orchestrator] 3 tentativas sem melhora (paciência=3). Parando — modelo atual provavelmente já é o melhor que essa abordagem consegue.",
+    "[19:17:36] --- iteração 1 ---",
+    "[19:17:36] [data_collector] baixando dados de 'playground-series-s6e7'",
+    "[19:17:38] [data_collector] EDA: {'n_rows': 690088, 'n_cols': 15, 'columns': ['id', 'health_condition', 'sleep_duration', 'heart_rate', 'bmi', 'calorie_expenditure', 'step_count', 'exercise_duration', 'water_intake', 'diet_type', 'stress_level', 'sleep_quality', 'physical_activity_level', 'smoking_alcohol', 'gender'], 'dtypes': {'id': 'int64', 'health_condition': 'str', 'sleep_duration': 'float64', 'heart_rate': 'float64', 'bmi': 'float64', 'calorie_expenditure': 'float64', 'step_count': 'float64', 'exercise_duration': 'float64', 'water_intake': 'float64', 'diet_type': 'str', 'stress_level': 'str', 'sleep_quality': 'str', 'physical_activity_level': 'str', 'smoking_alcohol': 'str', 'gender': 'str'}, 'null_pct': {'id': 0.0, 'health_condition': 0.0, 'sleep_duration': 11.01, 'heart_rate': 1.14, 'bmi': 2.01, 'calorie_expenditure': 7.66, 'step_count': 2.02, 'exercise_duration': 1.0, 'water_intake': 6.3, 'diet_type': 1.0, 'stress_level': 12.0, 'sleep_quality': 8.45, 'physical_activity_level': 5.31, 'smoking_alcohol': 4.14, 'gender': 3.1}}",
+    "[19:17:38] --- iteração 2 ---",
+    "[19:17:38] [modeler] preparando features",
+    "[19:17:38] [modeler] 14 features numéricas + 7 categóricas (29 colunas após encoding)",
+    "[19:17:38] --- iteração 3 ---",
+    "[19:17:38] [modeler] treinando modelo com cross-validation, params={'n_estimators': 800, 'learning_rate': 0.02, 'max_depth': 6, 'num_leaves': 63}",
+    "[19:20:50] [modeler] fold 0: score=0.9482",
+    "[19:24:01] [modeler] fold 1: score=0.9445",
+    "[19:27:13] [modeler] fold 2: score=0.9473",
+    "[19:30:24] [modeler] fold 3: score=0.9458",
+    "[19:33:34] [modeler] fold 4: score=0.9503",
+    "[19:33:34] [modeler] modelo 50abea8c treinado, cv_score médio=0.9472 (melhor até agora=0.9496, sem melhora há 1 tentativa(s))",
+    "[19:33:34] --- iteração 4 ---",
+    "[19:33:34] [modeler] gerando predictions no test set",
+    "[19:34:01] [submitter] formatando submissão do modelo 50abea8c",
+    "[19:34:03] [submitter] enviado: model=50abea8c cv=0.9472",
+    "[19:34:03] --- iteração 5 ---",
+    "[19:34:03] [monitor] consultando leaderboard",
+    "[19:34:04] [monitor] score 0.94724 fora do top 20 — posição exata desconhecida, mas certamente não está no topo do ranking ainda",
+    "[19:34:04] [orchestrator] meta não atingida, retreinando com ajuste",
+    "[19:34:04] --- iteração 6 ---",
+    "[19:34:04] [modeler] treinando modelo com cross-validation, params={'n_estimators': 400, 'learning_rate': 0.05, 'max_depth': 3, 'num_leaves': 7}",
+    "[19:36:30] [modeler] fold 0: score=0.9483",
+    "[19:38:56] [modeler] fold 1: score=0.9452",
+    "[19:41:20] [modeler] fold 2: score=0.9477",
+    "[19:43:46] [modeler] fold 3: score=0.9460",
+    "[19:46:12] [modeler] fold 4: score=0.9500",
+    "[19:46:12] [modeler] modelo 3ae04d73 treinado, cv_score médio=0.9474 (melhor até agora=0.9496, sem melhora há 2 tentativa(s))",
+    "[19:46:12] --- iteração 7 ---",
+    "[19:46:12] [modeler] gerando predictions no test set",
+    "[19:46:22] [submitter] formatando submissão do modelo 3ae04d73",
+    "[19:46:23] [orchestrator] Limite diário de submissões atingido para 'playground-series-s6e7'. Resposta da Kaggle: {\"error\":{\"code\":400,\"message\":\"Submission not allowed:  Your team has used its daily Submission allowance (10) today, please try again tomorrow UTC (4.2 hours from now).\",\"status\":\"FAILED_PRECONDITION\"}} — isso é esperado, não um bug. Parando aqui; a próxima execução agendada continua de onde este estado ficou salvo."
   ]
 }

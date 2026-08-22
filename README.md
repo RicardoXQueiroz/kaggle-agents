@@ -14,7 +14,7 @@ Credenciais da Kaggle API: baixe `kaggle.json` em
 https://www.kaggle.com/settings > API > Create New Token, e coloque em
 `~/.kaggle/kaggle.json` (permissão 600).
 
-Aceite as regras da competição no site antes de rodar — a API rejeita
+Aceite as regras da competição no site antes de rodar a API rejeita
 submissões para competições cujas regras você não aceitou manualmente.
 
 ## Rodar
